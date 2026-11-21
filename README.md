@@ -22,6 +22,22 @@ Other scripts:
 | `npm run preview` | Serve the production build locally |
 | `npm run verify` | Headless check: runs the 9-step demo sequence through the validator + agent engine and asserts each state |
 
+## Pinpoint Kit 3D showcase (hardware concept)
+
+[showcase/pinpoint-kit.html](showcase/pinpoint-kit.html) is a single self-contained page for the pitch. It shows the proposed **Pinpoint Kit**, a carry case with a smart breadboard, an Uno-compatible board, parts trays, jumper wires, a USB-C cable and a quick-start guide. Every model is procedural Three.js geometry. Three.js and the fonts load from public CDNs, so the page needs an internet connection. There is no build step and no backend.
+
+Open the file in Chrome, Edge, Safari or Firefox. To serve it locally instead, run `npx serve showcase` and open `/pinpoint-kit.html`.
+
+| Input | Action |
+| --- | --- |
+| Drag / right-drag / scroll | Rotate / pan / zoom |
+| Click the closed case, **Open Kit**, or `O` | Open or close the lid |
+| Click a part (lid open) | Highlight it, fly the camera to it and show its description; click empty space or press `Esc` to dismiss |
+| **Exploded View** or `E` | Lift the part groups out of their pockets, with labels |
+| **Reset View** or `R` | Close everything and return to the hero angle |
+
+Deep links for presenting: `pinpoint-kit.html#open` starts with the lid open, and `#exploded` starts in the exploded view. The closed kit slowly turns when idle.
+
 ## Demo walkthrough (about 2 minutes)
 
 1. Open **http://localhost:5173/#/workspace**. The board shows "No board connected".
