@@ -45,7 +45,7 @@ export const agentPlaybook = {
       title: 'Wire lands in the wrong column',
       explanation:
         'Your {wireColor} wire reaches the {anchorLabel}, but its other end sits in {wrongHole} — column {wrongCol} has nothing else connected. The {targetLabel} is in column {targetCol}, so it is still not connected to {anchorShort}. The circuit is open and no current can flow.',
-      action: 'Move the wire end from {wrongHole} to {suggestedHole}. Any free hole in column {targetCol}, rows A–E, also works.',
+      action: 'Move the wire end from {wrongHole} to {suggestedHole}. Any free hole in column {targetCol}, rows {terminalRows}, also works.',
       concept: {
         title: 'Why one column makes the difference',
         body: 'Inside the breadboard, each numbered column of five holes (A–E) is a single metal strip. Parts only connect when their legs share a strip — one column over is a completely separate node.',
@@ -64,7 +64,7 @@ export const agentPlaybook = {
     SHORT_CIRCUIT: {
       title: 'Short circuit between +5 V and ground',
       explanation:
-        'The + rail and the − rail are connected directly with nothing to limit current. The device has disabled the supply to protect your parts.',
+        'The + rail and the − rail are connected directly with nothing to limit current. The simulation shows the supply disabled.',
       action: 'Remove the jumper that bridges the rails, then re-check each wire end before reconnecting.',
       concept: {
         title: 'What is a short circuit?',

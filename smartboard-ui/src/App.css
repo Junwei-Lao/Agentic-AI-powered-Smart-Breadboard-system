@@ -2787,3 +2787,13 @@ path.bb-ghost-line {
   padding: 12px 16px;
   margin-bottom: 16px;
 }
+
+.triage-card {
+  background: var(--ai-soft);
+  padding: 12px 16px;
+  overflow-wrap: anywhere;
+  flex-shrink: 0;
+}
+.triage-card p, .triage-card details { margin-top: 6px; }
+.triage-card details { color: var(--text-2); font-size: .85rem; }
+.triage-card summary { cursor: pointer; }

@@ -150,8 +150,11 @@ export function validateCircuit({ components = [], project, boardConfig }) {
         // `hole` is a dangling wire end → suggest the target pin's column.
         const [tRef, tPin] = target.term.split('.');
         const tComp = matches[tRef];
-        const tActualPin = refComps[tRef].polarized
-          ? tPin
+        const tRefComp = refComps[tRef];
+        const reversed = tRefComp.polarized
+          && issues.some(issue => issue.code === 'LED_REVERSED' && issue.componentId === tComp.id);
+        const tActualPin = tRefComp.polarized
+          ? (reversed ? tRefComp.pins.find(pinName => pinName !== tPin) : tPin)
           : Object.keys(tComp.pins)[(tPin === 'a') !== Boolean(orient[tRef]) ? 0 : 1];
         const targetNode = netlist.nodeOfPin(tComp.id, tActualPin);
         const suggestedHole = findFreeHole(targetNode, components, parseHole(hole).row);
@@ -170,6 +173,7 @@ export function validateCircuit({ components = [], project, boardConfig }) {
             targetTerm: target.term,
             targetComponentId: tComp.id,
             targetPin: tActualPin,
+            targetAfterRotation: reversed,
             wrongCol: columnOfNode(node),
             targetCol: columnOfNode(targetNode),
           },

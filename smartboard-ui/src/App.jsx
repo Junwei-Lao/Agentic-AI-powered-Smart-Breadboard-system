@@ -32,6 +32,7 @@ import {
   virtualDevice,
 } from './data/mockData.js';
 import { useHardware } from './hooks/useHardware.js';
+import { useNemotronTriage } from './hooks/useNemotronTriage.js';
 import { useAgent } from './hooks/useAgent.js';
 import { useHashRoute } from './hooks/useHashRoute.js';
 import { useNow } from './hooks/useNow.js';
@@ -59,12 +60,18 @@ export default function App() {
     () => validateCircuit({ components: hardware.components, project, boardConfig }),
     [hardware.components, project],
   );
+  const triage = useNemotronTriage({ enabled: route === 'workspace', hardware, diagnostics, project });
   const agent = useAgent({ hardware, diagnostics, project });
   const assessment = agent.assessment || diagnostics;
   const highlightsStale = agent.run?.kind === 'proactive' && !agent.run.finishedAt;
   const highlights = useMemo(
-    () => deriveBoardHighlights(assessment, project, hardware.components, { showGhosts: settings.showGhostHints }),
-    [assessment, project, hardware.components, settings.showGhostHints],
+    () => {
+      const chosenIssue = triage?.mode === 'nemotron'
+        ? diagnostics.issues.find(issue => issue.key === triage.action.id) : null;
+      const visibleAssessment = chosenIssue ? { ...diagnostics, issues: [chosenIssue] } : assessment;
+      return deriveBoardHighlights(visibleAssessment, project, hardware.components, { showGhosts: settings.showGhostHints });
+    },
+    [assessment, diagnostics, triage, project, hardware.components, settings.showGhostHints],
   );
 
   const latest = hardware.events[0];
@@ -175,7 +182,7 @@ export default function App() {
           highlightsStale={highlightsStale}
           recent={recent}
           measurements={measurements}
-          agent={agent}
+          agent={{ ...agent, triage }}
           persona={agentPlaybook.persona}
           suggestions={agentPlaybook.suggestions}
           onAsk={agent.ask}

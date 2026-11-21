@@ -88,6 +88,29 @@ export const emulatorActions = {
     isDone: (s) => has(s, 'D1'),
     events: () => [inserted(demoParts.led)],
   },
+  rotateLed: {
+    label: 'Rotate LED 180°',
+    available: (s) => connected(s) && has(s, 'D1'),
+    events: (s) => {
+      const led = find(s, 'D1');
+      return [
+        removeComponentEvent(s, led.id),
+        inserted({ ...led, pins: { anode: led.pins.cathode, cathode: led.pins.anode } }),
+      ];
+    },
+  },
+  loadDebugChallenge: {
+    label: 'Load two-fault challenge',
+    available: (s) => s.connection !== 'connecting',
+    events: (s) => [
+      ...(connected(s) ? [] : emulatorActions.connect.events()),
+      ...emulatorActions.reset.events(),
+      inserted(demoParts.resistor),
+      inserted({ ...demoParts.led, pins: { anode: demoParts.led.pins.cathode, cathode: demoParts.led.pins.anode } }),
+      inserted(demoParts.powerWire),
+      inserted(demoParts.groundWireWrong),
+    ],
+  },
   addPowerWire: {
     label: 'Add positive supply wire',
     hint: '+ rail 8 → A10',

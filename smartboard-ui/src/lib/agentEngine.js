@@ -7,7 +7,7 @@
  * real LLM agent later — the UI only consumes the returned objects.
  */
 import { agentPlaybook as P } from '../data/agentPlaybook.js';
-import { componentName, formatHole, formatNode, formatResistance } from './boardModel.js';
+import { componentName, formatHole, formatNode, formatResistance, parseHole } from './boardModel.js';
 
 /** Fill "{key}" placeholders. Unknown keys are left empty. */
 export function fill(template, ctx = {}) {
@@ -79,6 +79,7 @@ export function issueBlocks(issue, { components, project }) {
       wrongHole: formatHole(issue.wrongHole),
       suggestedHole: formatHole(issue.suggestedHole),
       wrongNode: formatNode(issue.wrongNode),
+      terminalRows: parseHole(issue.suggestedHole)?.row >= 'f' ? 'F–J' : 'A–E',
     });
   }
   if (issue.code === 'LED_REVERSED') {
@@ -102,6 +103,9 @@ export function issueBlocks(issue, { components, project }) {
       to: issue.suggestedHole ? formatHole(issue.suggestedHole) : null,
     },
   ];
+  if (issue.code === 'MISPLACED_WIRE_END' && issue.context.targetAfterRotation) {
+    blocks[0].text = `The ${ctx.wireColor} wire ends in ${ctx.wrongHole}, an unused column. After rotating the LED, ${ctx.targetLabel} belongs in column ${ctx.targetCol}.`;
+  }
   if (t.concept) blocks.push({ type: 'concept', title: t.concept.title, text: t.concept.body });
   return blocks;
 }
