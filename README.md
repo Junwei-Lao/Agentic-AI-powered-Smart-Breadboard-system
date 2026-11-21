@@ -6,6 +6,8 @@ Companion desktop web app for a **physical smart breadboard**. The board reports
 
 ## Run the project
 
+> Looking for the 3D **Pinpoint Kit** hardware showcase? It is a standalone page that needs no install. See [Run the showcase](#run-the-showcase).
+
 Requirements: **Node.js 18+** (tested with Node 26) and npm.
 
 ```bash
@@ -26,7 +28,43 @@ Other scripts:
 
 [showcase/pinpoint-kit.html](showcase/pinpoint-kit.html) is a single self-contained page for the pitch. It shows the proposed **Pinpoint Kit**, a carry case with a smart breadboard, an Uno-compatible board, parts trays, jumper wires, a USB-C cable and a quick-start guide. Every model is procedural Three.js geometry. Three.js and the fonts load from public CDNs, so the page needs an internet connection. There is no build step and no backend.
 
-Open the file in Chrome, Edge, Safari or Firefox. To serve it locally instead, run `npx serve showcase` and open `/pinpoint-kit.html`.
+### Run the showcase
+
+The showcase is separate from the React app. It needs no `npm install` and no build.
+
+**Option A: open the file directly (simplest)**
+
+1. In File Explorer or Finder, go to the `showcase/` folder.
+2. Double-click `pinpoint-kit.html`, or drag it onto a Chrome, Edge, Safari or Firefox window.
+
+From a terminal at the repository root, you can also run:
+
+```powershell
+start showcase\pinpoint-kit.html      # Windows (PowerShell or cmd)
+```
+
+```bash
+open showcase/pinpoint-kit.html       # macOS
+xdg-open showcase/pinpoint-kit.html   # Linux
+```
+
+**Option B: serve it on a local web server**
+
+Use this if your browser blocks pages opened from the file system. Run one of these from the repository root:
+
+```bash
+npx serve showcase                                  # then open http://localhost:3000/pinpoint-kit
+python -m http.server 8000 --directory showcase     # then open http://localhost:8000/pinpoint-kit.html
+```
+
+**Requirements and tips**
+
+- **Internet connection:** Three.js and the fonts load from public CDNs on first load. If they cannot load, the page shows a message instead of the 3D view.
+- **Browser:** use a current desktop browser with WebGL enabled. Chrome or Edge gives the smoothest result on most laptops.
+- **On stage:** press `F11` (or `Ctrl+Cmd+F` on macOS) for full screen. Load the page once before you present so the CDN files are cached.
+- **Deep links:** add `#open` or `#exploded` to the address to start with the lid open or in the exploded view, for example `pinpoint-kit.html#open`.
+
+### Controls
 
 | Input | Action |
 | --- | --- |
@@ -36,7 +74,7 @@ Open the file in Chrome, Edge, Safari or Firefox. To serve it locally instead, r
 | **Exploded View** or `E` | Lift the part groups out of their pockets, with labels |
 | **Reset View** or `R` | Close everything and return to the hero angle |
 
-Deep links for presenting: `pinpoint-kit.html#open` starts with the lid open, and `#exploded` starts in the exploded view. The closed kit slowly turns when idle.
+The closed kit slowly turns when idle.
 
 ## Demo walkthrough (about 2 minutes)
 
