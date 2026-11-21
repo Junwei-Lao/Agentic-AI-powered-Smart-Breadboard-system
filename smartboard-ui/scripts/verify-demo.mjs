@@ -9,6 +9,8 @@ import { nextDemoEvents, simulateSensors, emulatorActions, demoProgress } from '
 import { validateCircuit } from '../src/lib/circuitValidator.js';
 import { planAgentRun } from '../src/lib/agentEngine.js';
 import { deriveBoardHighlights } from '../src/lib/highlights.js';
+import { holesOfNode, parseHole } from '../src/lib/boardModel.js';
+import { reportSession, toSessionCsv } from '../src/lib/sessionReport.js';
 import { askAgent } from '../src/lib/agentService.js';
 import { projects, boardConfig } from '../src/data/mockData.js';
 
@@ -34,7 +36,7 @@ const expected = [
 let i = 0;
 let step;
 while ((step = nextDemoEvents(state))) {
-  apply(step.events);
+  apply(step.events.map(event => ({ ...event, ts: (i + 1) * 1000 })));
   const d = validateCircuit({ components: state.components, project, boardConfig });
   const run = planAgentRun({ event: state.events[0], prevDiagnostics: prev, diagnostics: d, project, hardware: state });
   const hl = deriveBoardHighlights(d, project, state.components);
@@ -68,3 +70,20 @@ assert.ok(d2.issues.some((x) => x.code === 'LED_REVERSED'), 'reversed LED detect
 const ans = await askAgent('What should I do next?', { diagnostics: d2, project, hardware: s2 });
 console.log('\nChat answer:', ans.message.blocks.map((b) => b.title || b.text).join(' / '));
 console.log('\n✔ Demo sequence verified: all 9 states reached and validated.');
+
+const report = reportSession(state.events, project, boardConfig);
+assert.equal(report.fullHistory, true);
+assert.equal(report.recoveryMs, 1000);
+assert.match(report.rows.at(-2).issues.join(' '), /MISPLACED_WIRE_END/);
+assert.equal(report.rows.at(-1).status, 'complete');
+assert.match(toSessionCsv(report.rows, project), /COMPONENT_MOVED.*A16.*A15.*complete/);
+const partial = reportSession(state.events.slice(0, -1), project, boardConfig);
+assert.equal(partial.fullHistory, false);
+assert.equal(partial.recoveryMs, null);
+assert.equal(partial.rows.at(-1).status, '');
+const resetState = applyHardwareEvent(state, { ...emulatorActions.reset.events()[0], ts: 7000 });
+assert.equal(reportSession(resetState.events, project, boardConfig).recoveryMs, null);
+assert.equal(holesOfNode('tp').length, 25);
+assert.equal(parseHole('tp26'), null);
+assert.ok(parseHole('a30'));
+console.log('✔ Professional trace, timing, CSV, reset, and 400-point geometry verified.');

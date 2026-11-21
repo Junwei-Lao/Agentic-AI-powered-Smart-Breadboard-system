@@ -14,6 +14,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import Sidebar from './components/Sidebar.jsx';
 import Workspace from './pages/Workspace.jsx';
+import Professional from './pages/Professional.jsx';
 import Projects from './pages/Projects.jsx';
 import Device from './pages/Device.jsx';
 import Emulator from './pages/Emulator.jsx';
@@ -31,6 +32,7 @@ import {
   virtualDevice,
 } from './data/mockData.js';
 import { useHardware } from './hooks/useHardware.js';
+import { useNemotronTriage } from './hooks/useNemotronTriage.js';
 import { useAgent } from './hooks/useAgent.js';
 import { useHashRoute } from './hooks/useHashRoute.js';
 import { useNow } from './hooks/useNow.js';
@@ -39,7 +41,7 @@ import { validateCircuit } from './lib/circuitValidator.js';
 import { deriveBoardHighlights } from './lib/highlights.js';
 import { demoProgress, emulatorActions, nextDemoEvents, removeComponentEvent } from './lib/virtualDevice.js';
 
-const ROUTES = ['workspace', 'projects', 'device', 'history', 'settings', 'emulator'];
+const ROUTES = ['workspace', 'projects', 'device', 'history', 'settings', 'emulator', 'professional'];
 const HANDSHAKE_MS = 900;
 
 export default function App() {
@@ -58,12 +60,18 @@ export default function App() {
     () => validateCircuit({ components: hardware.components, project, boardConfig }),
     [hardware.components, project],
   );
+  const triage = useNemotronTriage({ enabled: route === 'workspace', hardware, diagnostics, project });
   const agent = useAgent({ hardware, diagnostics, project });
   const assessment = agent.assessment || diagnostics;
   const highlightsStale = agent.run?.kind === 'proactive' && !agent.run.finishedAt;
   const highlights = useMemo(
-    () => deriveBoardHighlights(assessment, project, hardware.components, { showGhosts: settings.showGhostHints }),
-    [assessment, project, hardware.components, settings.showGhostHints],
+    () => {
+      const chosenIssue = triage?.mode === 'nemotron'
+        ? diagnostics.issues.find(issue => issue.key === triage.action.id) : null;
+      const visibleAssessment = chosenIssue ? { ...diagnostics, issues: [chosenIssue] } : assessment;
+      return deriveBoardHighlights(visibleAssessment, project, hardware.components, { showGhosts: settings.showGhostHints });
+    },
+    [assessment, diagnostics, triage, project, hardware.components, settings.showGhostHints],
   );
 
   const latest = hardware.events[0];
@@ -104,6 +112,9 @@ export default function App() {
 
   let content;
   switch (page) {
+    case 'professional':
+      content = <Professional hardware={hardware} diagnostics={diagnostics} project={project} boardConfig={boardConfig} onNavigate={navigate} />;
+      break;
     case 'projects':
       content = (
         <Projects
@@ -171,7 +182,7 @@ export default function App() {
           highlightsStale={highlightsStale}
           recent={recent}
           measurements={measurements}
-          agent={agent}
+          agent={{ ...agent, triage }}
           persona={agentPlaybook.persona}
           suggestions={agentPlaybook.suggestions}
           onAsk={agent.ask}

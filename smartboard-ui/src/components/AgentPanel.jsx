@@ -253,6 +253,25 @@ export default function AgentPanel({ agent, persona, suggestions = [], onAsk, mo
         </span>
       </div>
 
+      <section className="triage-card" aria-live="polite">
+        {agent.triage?.mode === 'nemotron' ? <>
+          <strong>NVIDIA Nemotron · Tool-assisted triage</strong>
+          <p>{agent.triage.explanation}</p>
+          <p><b>Next step</b> {agent.triage.action.instruction}</p>
+          <details>
+            <summary>Show model and tool trace</summary>
+            <p className="mono">{agent.triage.model}</p>
+            {agent.triage.activity.map((entry, index) => <div key={index} className="mono">{entry.name} · {entry.detail}</div>)}
+            {agent.triage.providerRequestId && <p className="mono">Request {agent.triage.providerRequestId}</p>}
+          </details>
+        </> : <>
+          <strong>Local guidance</strong>
+          {agent.triage?.mode === 'checking' && <p>Checking the current board with Nemotron…</p>}
+          {agent.triage?.reason === 'missing_key' && <p>Nemotron key is not configured.</p>}
+          {agent.triage?.reason && !['missing_key', 'no_action'].includes(agent.triage.reason) && <p>Nemotron did not complete this run.</p>}
+        </>}
+      </section>
+
       <div className="agent-feed" ref={feedRef}>
         {agent.messages.map((m) => (
           <AgentMessage key={m.id} m={m} now={now} />
@@ -271,7 +290,7 @@ export default function AgentPanel({ agent, persona, suggestions = [], onAsk, mo
       <section className={`activity ${logOpen ? 'is-open' : ''}`}>
         <button className="activity-head" onClick={() => setLogOpen((o) => !o)}>
           <Terminal size={13} />
-          <span>Agent activity log</span>
+          <span>Local activity log</span>
           <span className="activity-count">{agent.activity.length}</span>
           <ChevronDown size={14} className={`chev ${logOpen ? 'is-open' : ''}`} />
         </button>

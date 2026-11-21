@@ -14,7 +14,7 @@
  * physical board and this view mirrors it.
  */
 import { memo, useMemo } from 'react';
-import { BOTTOM_ROWS, COLUMNS, RAILS, TOP_ROWS, componentName, formatHole, parseHole } from '../lib/boardModel.js';
+import { BOTTOM_ROWS, COLUMNS, RAIL_COLUMNS, RAILS, TOP_ROWS, componentName, formatHole, parseHole } from '../lib/boardModel.js';
 
 /* ---------------------------------------------------------------- geometry */
 const P = 22;
@@ -24,17 +24,17 @@ const H = 420;
 const ROW_Y = { tp: 30, tn: 52, bn: 370, bp: 392 };
 TOP_ROWS.forEach((r, i) => (ROW_Y[r] = 106 + i * P));
 BOTTOM_ROWS.forEach((r, i) => (ROW_Y[r] = 238 + i * P));
-const colX = (col) => X0 + (col - 1) * P;
+const colX = (col, row) => X0 + (col - 1 + (RAILS.includes(row) ? (COLUMNS - RAIL_COLUMNS) / 2 : 0)) * P;
 
 export function holeXY(id) {
   const h = parseHole(id);
-  return h ? { x: colX(h.col), y: ROW_Y[h.row] } : { x: 0, y: 0 };
+  return h ? { x: colX(h.col, h.row), y: ROW_Y[h.row] } : { x: 0, y: 0 };
 }
 
 function nodeRect(node) {
   if (RAILS.includes(node)) {
     const y = ROW_Y[node];
-    return { x: X0 - 12, y: y - 10, w: W - 2 * X0 + 24, h: 20 };
+    return { x: colX(1, node) - 12, y: y - 10, w: (RAIL_COLUMNS - 1) * P + 24, h: 20 };
   }
   const col = Number(node.slice(1));
   const top = node[0] === 'T';
@@ -209,8 +209,8 @@ function BoardBase({ showLabels }) {
   const holes = [];
   const rows = [...RAILS, ...TOP_ROWS, ...BOTTOM_ROWS];
   for (const r of rows) {
-    for (let col = 1; col <= COLUMNS; col++) {
-      holes.push(<rect key={r + col} x={colX(col) - 4.5} y={ROW_Y[r] - 4.5} width={9} height={9} rx={1.6} className="bb-hole" />);
+    for (let col = 1; col <= (RAILS.includes(r) ? RAIL_COLUMNS : COLUMNS); col++) {
+      holes.push(<rect key={r + col} x={colX(col, r) - 4.5} y={ROW_Y[r] - 4.5} width={9} height={9} rx={1.6} className="bb-hole" />);
     }
   }
   return (

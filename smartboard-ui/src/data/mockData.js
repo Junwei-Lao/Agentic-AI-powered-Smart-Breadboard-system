@@ -13,7 +13,7 @@ export { agentPlaybook } from './agentPlaybook.js';
 export const virtualDevice = {
   mode: 'virtual',
   name: 'Pinpoint Board One',
-  model: 'PB-1 (830-point)',
+  model: 'PB-1 (400-point)',
   deviceId: 'PB1-VIRT-0042',
   serial: 'SIM-24-0042',
   firmware: 'v0.9.3-sim (placeholder)',
@@ -40,7 +40,7 @@ export const boardConfig = {
 };
 
 export const deviceSensors = [
-  { id: 'contact-matrix', label: 'Hole contact matrix', detail: '320 terminal + 120 rail contacts', status: 'simulated' },
+  { id: 'contact-matrix', label: 'Hole contact matrix', detail: '300 terminal + 100 rail contacts', status: 'simulated' },
   { id: 'rail-monitor', label: 'Rail voltage monitor', detail: '±0.01 V resolution', status: 'simulated' },
   { id: 'current-sense', label: 'Current sense amplifier', detail: '0–500 mA, 0.1 mA resolution', status: 'simulated' },
   { id: 'component-id', label: 'Component identification', detail: 'Resistance / diode probe', status: 'simulated' },

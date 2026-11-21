@@ -2735,3 +2735,65 @@ path.bb-ghost-line {
     display: none;
   }
 }
+
+/* Professional session evidence */
+.professional .page-head {
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.professional .grid-2 {
+  margin-bottom: 16px;
+}
+.pro-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 16px;
+}
+.pro-summary > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.pro-summary strong {
+  font-size: 1.35rem;
+  font-variant-numeric: tabular-nums;
+}
+.pro-scroll {
+  min-width: 0;
+  overflow-x: auto;
+}
+.pro-scroll td {
+  overflow-wrap: anywhere;
+}
+.pro-scroll .card-head {
+  gap: 12px;
+}
+.pro-detail {
+  display: block;
+}
+.pro-note {
+  padding: 14px 16px;
+  overflow-wrap: anywhere;
+}
+.pro-empty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.triage-card {
+  background: var(--ai-soft);
+  padding: 12px 16px;
+  overflow-wrap: anywhere;
+  flex-shrink: 0;
+}
+.triage-card p, .triage-card details { margin-top: 6px; }
+.triage-card details { color: var(--text-2); font-size: .85rem; }
+.triage-card summary { cursor: pointer; }

@@ -25,6 +25,7 @@ const ICONS = {
   disconnect: Unplug,
   insertResistor: Zap,
   insertLed: Lightbulb,
+  rotateLed: RotateCcw,
   addPowerWire: Cable,
   insertWrongGround: Cable,
   correctGround: MoveRight,
@@ -33,7 +34,7 @@ const ICONS = {
 
 const GROUPS = [
   { title: 'Connection', actions: ['connect', 'disconnect'] },
-  { title: 'Components', actions: ['insertResistor', 'insertLed'] },
+  { title: 'Components', actions: ['insertResistor', 'insertLed', 'rotateLed'] },
   { title: 'Wiring', actions: ['addPowerWire', 'insertWrongGround', 'correctGround'] },
 ];
 
@@ -123,6 +124,19 @@ export default function Emulator({ hardware, actions, demo, onAction, onRemove, 
               </button>
               <button className="btn btn-ghost" onClick={() => setAutoPlay((a) => !a)} disabled={!nextStep && !autoPlay} title="Auto-play the remaining steps">
                 {autoPlay ? <Pause size={15} /> : <Play size={15} />}
+              </button>
+            </div>
+          </section>
+
+          <section className="card">
+            <div className="card-head"><h3>Debug challenge</h3></div>
+            <div className="emu-actions">
+              <button className="emu-btn is-fault" disabled={!actions.loadDebugChallenge.available(hardware)} onClick={() => {
+                setAutoPlay(false);
+                onAction('loadDebugChallenge');
+              }}>
+                <FlaskConical size={16} />
+                <span><strong>Load two-fault challenge</strong><small>Replace the current layout with a dark LED circuit.</small></span>
               </button>
             </div>
           </section>

@@ -45,7 +45,7 @@ export const agentPlaybook = {
       title: 'Wire lands in the wrong column',
       explanation:
         'Your {wireColor} wire reaches the {anchorLabel}, but its other end sits in {wrongHole} — column {wrongCol} has nothing else connected. The {targetLabel} is in column {targetCol}, so it is still not connected to {anchorShort}. The circuit is open and no current can flow.',
-      action: 'Move the wire end from {wrongHole} to {suggestedHole}. Any free hole in column {targetCol}, rows A–E, also works.',
+      action: 'Move the wire end from {wrongHole} to {suggestedHole}. Any free hole in column {targetCol}, rows {terminalRows}, also works.',
       concept: {
         title: 'Why one column makes the difference',
         body: 'Inside the breadboard, each numbered column of five holes (A–E) is a single metal strip. Parts only connect when their legs share a strip — one column over is a completely separate node.',
@@ -64,7 +64,7 @@ export const agentPlaybook = {
     SHORT_CIRCUIT: {
       title: 'Short circuit between +5 V and ground',
       explanation:
-        'The + rail and the − rail are connected directly with nothing to limit current. The device has disabled the supply to protect your parts.',
+        'The + rail and the − rail are connected directly with nothing to limit current. The simulation shows the supply disabled.',
       action: 'Remove the jumper that bridges the rails, then re-check each wire end before reconnecting.',
       concept: {
         title: 'What is a short circuit?',
@@ -88,7 +88,7 @@ export const agentPlaybook = {
   success: {
     title: 'Circuit verified',
     body: 'All {matched} required connections match the reference circuit. Current flows +5 V → 220 Ω → LED → GND{measurementText}.',
-    measurementText: ', and I measure {current} mA through the loop — well within the LED’s 20 mA rating',
+    measurementText: ', and the simulator estimates {current} mA through the loop — well within the LED’s 20 mA rating',
     concept: {
       title: 'Check it with Ohm’s law',
       body: 'I = (5 V − 2.0 V LED drop) / 220 Ω ≈ 13.6 mA. The resistor drops the extra 3 V so the LED is not over-driven.',
