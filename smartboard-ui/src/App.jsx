@@ -14,6 +14,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import Sidebar from './components/Sidebar.jsx';
 import Workspace from './pages/Workspace.jsx';
+import Professional from './pages/Professional.jsx';
 import Projects from './pages/Projects.jsx';
 import Device from './pages/Device.jsx';
 import Emulator from './pages/Emulator.jsx';
@@ -39,7 +40,7 @@ import { validateCircuit } from './lib/circuitValidator.js';
 import { deriveBoardHighlights } from './lib/highlights.js';
 import { demoProgress, emulatorActions, nextDemoEvents, removeComponentEvent } from './lib/virtualDevice.js';
 
-const ROUTES = ['workspace', 'projects', 'device', 'history', 'settings', 'emulator'];
+const ROUTES = ['workspace', 'projects', 'device', 'history', 'settings', 'emulator', 'professional'];
 const HANDSHAKE_MS = 900;
 
 export default function App() {
@@ -104,6 +105,9 @@ export default function App() {
 
   let content;
   switch (page) {
+    case 'professional':
+      content = <Professional hardware={hardware} diagnostics={diagnostics} project={project} boardConfig={boardConfig} onNavigate={navigate} />;
+      break;
     case 'projects':
       content = (
         <Projects

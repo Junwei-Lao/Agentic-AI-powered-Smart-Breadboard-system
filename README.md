@@ -97,3 +97,18 @@ Design rules:
 - **Agent:** replace `planAgentRun` (proactive) and `askAgent` (chat) with API calls that return the same `{ tools, message }` shape.
 
 See [AI_assumptions.md](AI_assumptions.md) for the decisions made where the brief was open.
+
+## Professional workspace
+
+Open `#/professional` after starting the emulator. The page shows the live
+reference checks, observed electrical nets and the recent session trace.
+During the LED demo, the incorrect A16 connection leaves two of three
+reference nets matched and adds a fault to the trace. Moving the wire to A15
+restores all three matches. The report times the first circuit fault through
+the first full verification in the current build. Use **Export session CSV**
+to save the recorded events, validation states and issue codes for review.
+
+The breadboard and readings remain simulated in this demo. The 400-point
+layout matches the Board One industrial-design concept. If the browser has
+pruned earlier events, the export retains the recent hardware events and
+omits replayed validation states and the recovery time.

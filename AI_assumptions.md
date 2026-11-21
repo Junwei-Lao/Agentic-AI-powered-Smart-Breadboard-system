@@ -11,7 +11,7 @@ Decisions the AI assistant made where the brief was open. In each case it chose 
 6. **Fonts** load from Google Fonts (Inter, JetBrains Mono). Offline, the app falls back to system fonts.
 
 ## Hardware model
-7. **Board.** A half-size 830-point layout with 30 columns, rows A–J and 4 power rails. Rails run the full length without gaps (as on most modern boards). The device powers the top and bottom **+ rails at 5 V** and ties both **− rails to ground**.
+7. **Board.** A 400-point board with 30 terminal columns in rows A–J and four continuous 25-hole power rails. The device powers the top and bottom **+ rails at 5 V** and ties both **− rails to ground**.
 8. **Hole IDs.** `b10` = row B, column 10. Rails are `tp`/`tn` (top +/−) and `bp`/`bn` (bottom +/−) plus a column number.
 9. **Event protocol.** The board is assumed to report `DEVICE_CONNECTED`, `DEVICE_DISCONNECTED`, `COMPONENT_INSERTED`, `COMPONENT_REMOVED`, `COMPONENT_MOVED` and `BOARD_RESET`, and to identify parts (type, value, LED polarity). Moving a wire end is a single `COMPONENT_MOVED` event, not remove + insert.
 10. **Demo layout.** Resistor 220 Ω at B10→B14, LED anode C14 / cathode C15, red wire + rail 8→A10, black ground wire − rail 17→**A16 (wrong)**, corrected to **A15**.

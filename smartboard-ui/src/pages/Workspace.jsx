@@ -153,7 +153,7 @@ export default function Workspace({
                 <div className="board-overlay-card">
                   <Cpu size={22} />
                   <h3>{hardware.connection === 'connecting' ? 'Connecting to your board…' : 'No board connected'}</h3>
-                  <p>Plug in your Pinpoint board, or start the virtual device from the Hardware Emulator.</p>
+                  <p>Start the virtual device from the Hardware Emulator to see the board update.</p>
                   <div className="row gap-8">
                     <button className="btn btn-primary btn-sm" onClick={() => onNavigate('device')}>
                       My Device
@@ -171,7 +171,7 @@ export default function Workspace({
         <div className="ws-bottom">
           <div className="card">
             <div className="card-head">
-              <h3>Live measurements</h3>
+              <h3>Simulated measurements</h3>
               {connected && (
                 <StatusPill tone="success" live>
                   Streaming

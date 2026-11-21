@@ -11,6 +11,7 @@
  */
 
 export const COLUMNS = 30;
+export const RAIL_COLUMNS = 25;
 export const TOP_ROWS = ['a', 'b', 'c', 'd', 'e'];
 export const BOTTOM_ROWS = ['f', 'g', 'h', 'i', 'j'];
 export const TERMINAL_ROWS = [...TOP_ROWS, ...BOTTOM_ROWS];
@@ -29,7 +30,7 @@ export function parseHole(id) {
   const m = HOLE_RE.exec(id || '');
   if (!m) return null;
   const col = Number(m[2]);
-  if (col < 1 || col > COLUMNS) return null;
+  if (col < 1 || col > (m[1].length === 2 ? RAIL_COLUMNS : COLUMNS)) return null;
   return { row: m[1], col, isRail: m[1].length === 2 };
 }
 
@@ -44,7 +45,7 @@ export function nodeOfHole(id) {
 
 export function holesOfNode(node) {
   if (RAILS.includes(node)) {
-    return Array.from({ length: COLUMNS }, (_, i) => holeId(node, i + 1));
+    return Array.from({ length: RAIL_COLUMNS }, (_, i) => holeId(node, i + 1));
   }
   const half = node[0];
   const col = Number(node.slice(1));

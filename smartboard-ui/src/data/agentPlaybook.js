@@ -88,7 +88,7 @@ export const agentPlaybook = {
   success: {
     title: 'Circuit verified',
     body: 'All {matched} required connections match the reference circuit. Current flows +5 V → 220 Ω → LED → GND{measurementText}.',
-    measurementText: ', and I measure {current} mA through the loop — well within the LED’s 20 mA rating',
+    measurementText: ', and the simulator estimates {current} mA through the loop — well within the LED’s 20 mA rating',
     concept: {
       title: 'Check it with Ohm’s law',
       body: 'I = (5 V − 2.0 V LED drop) / 220 Ω ≈ 13.6 mA. The resistor drops the extra 3 V so the LED is not over-driven.',

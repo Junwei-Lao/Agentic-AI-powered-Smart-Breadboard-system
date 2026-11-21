@@ -1,8 +1,9 @@
-import { CircuitBoard, Cpu, FlaskConical, History, LayoutDashboard, Settings, Wrench } from 'lucide-react';
+import { Activity, CircuitBoard, Cpu, FlaskConical, History, LayoutDashboard, Settings, Wrench } from 'lucide-react';
 import Logo from './Logo.jsx';
 
 const NAV = [
   { id: 'workspace', label: 'Live Workspace', icon: LayoutDashboard },
+  { id: 'professional', label: 'Professional', icon: Activity },
   { id: 'projects', label: 'Projects', icon: FlaskConical },
   { id: 'device', label: 'My Device', icon: Cpu },
   { id: 'history', label: 'Session History', icon: History },
